@@ -18,6 +18,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Pull LFS files
+        run: |
+          git lfs pull
 
       - name: Set up Python version
         uses: actions/setup-python@v5
@@ -73,4 +79,5 @@ jobs:
         with:
           app-name: 'snake-api-eshan123'
           slot-name: 'Production'
+
           
