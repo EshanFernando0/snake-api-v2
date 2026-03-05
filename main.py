@@ -120,7 +120,7 @@ def predict_species(img_bgr):
     else:
         name = idx_to_class[idx]
 
-    return name, float(probs[idx])
+    return idx, name, float(probs[idx])
 
 
 # ----------------------------
@@ -162,9 +162,15 @@ async def predict(file: UploadFile = File(...)):
         seg = safe_grabcut(img_bgr)
 
         # Phase 3: Species prediction
-        species, conf = predict_species(seg)
+        species_id, species, conf = predict_species(seg)
 
-        return {"status": "OK", "species": species, "confidence": conf, "snake_prob": p_snake}
+        return {
+            "status": "OK",
+            "species_id": species_id,
+            "species": species,
+            "confidence": conf,
+            "snake_prob": p_snake
+        }
 
     except FileNotFoundError as e:
         return JSONResponse({"status": "ERROR", "reason": str(e)}, status_code=500)
